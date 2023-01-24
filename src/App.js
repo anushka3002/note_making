@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function App() {
@@ -10,11 +10,10 @@ function App() {
     date:""
   })
 
-  const [cardData,setCardData] = useState({
-    cardTitle:"",
-    cardDescription:"",
-    cardDate:""
-  })
+  const [mainData,setMainData]= useState([])
+
+  var cardData;
+  var userData;
 
   const {
     register,
@@ -22,15 +21,45 @@ function App() {
   } = useForm(); 
 
   const onSubmit=(()=>{
-    setCardData({...cardData,cardTitle:data.title})
-    setCardData({...cardData,cardDescription:data.description})
-    setCardData({...cardData,cardDate:data.date})
+    cardData=JSON.parse(localStorage.getItem('noteData') || "[]")
+    if(cardData==null){
+      userData=[]
+    }
+    else{
+      userData=cardData;
+    }
+    userData.push(data)
+    localStorage.setItem('noteData',JSON.stringify(userData))
+    setMainData(userData)
+    console.log(userData)
+    console.log("submitted data")
+    userData.map((e)=>{
+      console.log(e.title)
+    })
+    // cardData=JSON.parse(localStorage.getItem('noteData') || "[]")
+    // console.log(cardData)
   })
+
+  const deleteItem = ((index)=>{
+    let localItems = JSON.parse(localStorage.getItem('noteData'))
+    mainData.splice(index, 1)
+    localStorage.setItem('noteData',JSON.stringify(mainData))
+  })
+
+
+  // useEffect(()=>{
+  //   userData.map((e)=>{
+  //     console.log(e.title)
+  //   })
+  // },[])
 
   return (
     <div className="App">
       <header className="">
         <h1>Note making app</h1>
+        {console.log("userdata",userData)}
+        {console.log("carddata",cardData)}
+        {console.log("anushka")}
        <div>
         <form onSubmit={handleSubmit(onSubmit)}>
         <label>Title</label>
@@ -41,6 +70,7 @@ function App() {
                     ...data,
                     [e.target.name]: e.target.value,
                   })}}></input>
+                  <br></br>
         <label>Descripton</label>
         <input
         {...register("description")}
@@ -49,6 +79,7 @@ function App() {
                     ...data,
                     [e.target.name]: e.target.value,
                   })}} type="text" placeholder='Add title'></input>
+                  <br></br>
         <label>Date</label>
         <input
         {...register("date")}
@@ -60,15 +91,18 @@ function App() {
         <br></br>
         <button className='bg-[pink]' type='submit'>Submit</button>
         </form>
-        {/* <div>
-          {cardData.map((e)=>{
-            return(
-              <div className='cardColor' key={e.title}>
-                <p>{cardData.title}</p>
+        <div className='border flex grid grid-cols-4 '>
+        {mainData.map((data,index) => {
+          return (
+            <div className='border w-[200px] h-[200px]'>
+              <p>Title: {data.title}</p>
+              <p>Description: {data.description}</p>
+              <p>Date: {data.date}</p>
+              <button className='border bg-[pink]'>Delete</button>
               </div>
-            )
-          })}
-        </div> */}
+            
+          )})}
+           </div>
        </div>
       </header>
     </div>
