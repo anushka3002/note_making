@@ -31,39 +31,24 @@ function App() {
     userData.push(data)
     localStorage.setItem('noteData',JSON.stringify(userData))
     setMainData(userData)
-    console.log(userData)
-    console.log("submitted data")
-    userData.map((e)=>{
-      console.log(e.title)
-    })
-    // cardData=JSON.parse(localStorage.getItem('noteData') || "[]")
-    // console.log(cardData)
   })
 
   const deleteItem = ((index)=>{
     let localItems = JSON.parse(localStorage.getItem('noteData'))
-    mainData.splice(index, 1)
-    localStorage.setItem('noteData',JSON.stringify(mainData))
+    localItems.splice(index, 1)
+    localStorage.setItem('noteData',JSON.stringify(localItems))
   })
-
-
-  // useEffect(()=>{
-  //   userData.map((e)=>{
-  //     console.log(e.title)
-  //   })
-  // },[])
 
   return (
     <div className="App">
-      <header className="">
-        <h1>Note making app</h1>
-        {console.log("userdata",userData)}
-        {console.log("carddata",cardData)}
-        {console.log("anushka")}
+      <header className="bg-[#1b1b1b]">
+        <h1 className='text-[white]'>Note making app</h1>
        <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Title</label>
-        <input
+          <div className='bg-[#fc8478]'>
+        <label className='text-20 font-semibold mr-3'>Title</label>
+        <input required
+        className='border '
         {...register("title")}
          name="title" type="text" placeholder='Add title' onChange={(e) => {
                   setData({
@@ -71,8 +56,9 @@ function App() {
                     [e.target.name]: e.target.value,
                   })}}></input>
                   <br></br>
-        <label>Descripton</label>
-        <input
+        <label className='text-20 font-semibold mr-3'>Descripton</label>
+        <input required
+         className='border '
         {...register("description")}
          name="description" onChange={(e) => {
                   setData({
@@ -80,8 +66,9 @@ function App() {
                     [e.target.name]: e.target.value,
                   })}} type="text" placeholder='Add title'></input>
                   <br></br>
-        <label>Date</label>
-        <input
+        <label className='text-20 font-semibold mr-3'>Date</label>
+        <input required
+         className='border '
         {...register("date")}
         name="date" type="text" onChange={(e) => {
                   setData({
@@ -90,15 +77,16 @@ function App() {
                   })}} placeholder='Add title'></input>
         <br></br>
         <button className='bg-[pink]' type='submit'>Submit</button>
+        </div>
         </form>
-        <div className='border flex grid grid-cols-4 '>
+        <div className=' flex grid grid-cols-4 bg-[#232f3e] justify-center items-center mx-auto'>
         {mainData.map((data,index) => {
           return (
-            <div className='border w-[200px] h-[200px]'>
-              <p>Title: {data.title}</p>
-              <p>Description: {data.description}</p>
-              <p>Date: {data.date}</p>
-              <button className='border bg-[pink]'>Delete</button>
+            <div className='w-[200px] h-[200px] mx-auto bg-[#1b1b1b] mb-3'>
+              <p className='text-[white]'>Title: {data.title}</p>
+              <p className='text-[white]'>Description: {data.description}</p>
+              <p className='text-[white]'>Date: {data.date}</p>
+              <button onClick={()=>deleteItem(index)} className='border bg-[pink]'>Delete</button>
               </div>
             
           )})}
